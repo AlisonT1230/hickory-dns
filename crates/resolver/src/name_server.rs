@@ -97,7 +97,8 @@ impl<P: ConnectionProvider> NameServer<P> {
     }
 
     // TODO: there needs to be some way of customizing the connection based on EDNS options from the server side...
-    pub(crate) async fn send(
+    /// Send a DNS request with the given connection policy and pool context.
+    pub async fn send(
         self: Arc<Self>,
         request: DnsRequest,
         policy: ConnectionPolicy,
@@ -773,9 +774,12 @@ impl From<u8> for Status {
     }
 }
 
+/// Rules for what connections are considered in the selection process
 #[derive(Debug, Copy, Clone, Default, Eq, PartialEq)]
-pub(crate) struct ConnectionPolicy {
-    pub(crate) disable_udp: bool,
+#[non_exhaustive]
+pub struct ConnectionPolicy {
+    /// Remove UDP when selecting connection
+    pub disable_udp: bool,
 }
 
 impl ConnectionPolicy {
